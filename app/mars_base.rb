@@ -21,6 +21,26 @@ class MarsBase
     extract_rover_input until @instructions.length < 2
   end
 
+  # Check that the filename is in the correct format and that the file exists.
+  def valid_filename?
+    @filename.is_a?(String) && File.exist?(@filename)
+  end
+
+  # Check that the first line of the file matches the expected format for the
+  # plateau dimensions.
+  def valid_dimensions?
+    file_content = File.open(@filename).gets
+    plateau_dimensions = file_content.lines.first
+    plateau_dimensions =~ /(^[\d]+\s[\d]+\n)/
+  end
+
+  # Calls all the validation predicate methods, if any return false raise an
+  # error with a descriptive message.
+  def validate_input
+    raise 'Invalid filename, or file does not exist' unless valid_filename?
+    raise 'Invalid or missing plateau dimensions' unless valid_dimensions?
+  end
+
   # Basic check that instruction line matches requirements
   # Regex match is checking for [integer] [space] [integer]
   def extract_plateau_input(instructions)

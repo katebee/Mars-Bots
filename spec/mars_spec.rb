@@ -18,11 +18,36 @@ describe MarsBase do
     expect(mars_base.filename).to be_a(String)
   end
 
+  it 'can check that a vaild filename has been passed' do
+    mars_base = MarsBase.new(filename)
+    expect(mars_base.valid_filename?).to be(TRUE)
+  end
+
   it 'can modify the filename' do
     mars_base = MarsBase.new(filename)
     expect(mars_base.filename).to match('test_input.txt')
     mars_base.filename = 'newfilename.txt'
     expect(mars_base.filename).to match('newfilename.txt')
+  end
+
+  context 'invalid filename' do
+    it 'should return false and raise error' do
+      mars_base = MarsBase.new(invalid_filename)
+      expect(mars_base.valid_filename?).to be(FALSE)
+      expect { mars_base.validate_input }.to raise_error(
+        RuntimeError,
+        'Invalid filename, or file does not exist')
+    end
+  end
+
+  context 'invalid instructions in file' do
+    it 'should raise an error' do
+      mars_base = MarsBase.new(invalid_input)
+      expect(mars_base.valid_filename?).to be(TRUE)
+      expect { mars_base.validate_input }.to raise_error(
+        RuntimeError,
+        'Invalid or missing plateau dimensions')
+    end
   end
 
   it 'will extract the plateau dimensions' do
