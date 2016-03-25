@@ -1,4 +1,21 @@
 
+# A Plateau is a strangly rectangular area that rovers will be exploring
+# Each instance take an array containing two integers
+class Plateau
+  attr_reader :max_x, :max_y, :min_x, :min_y
+
+  def initialize(plateau_dimensions)
+    @max_x = plateau_dimensions[0]
+    @max_y = plateau_dimensions[1]
+    @min_x = 0
+    @min_y = 0
+  end
+
+  def location_is_safe?(coords_x, coords_y)
+    coords_x.between?(@min_x, @max_x) &&
+      coords_y.between?(@min_y, @max_y)
+  end
+end
 
 # Each rover receives a hash of instructions
 # hash = {coords_x: int, coords_y: int, orientation: string, sequence: string}
