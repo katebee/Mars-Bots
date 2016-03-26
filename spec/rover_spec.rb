@@ -1,5 +1,5 @@
 
-require_relative '../app/mars_rover'
+require_relative '../app/rover'
 
 describe Rover do
   # pass sample input to the rover for unit testing

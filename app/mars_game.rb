@@ -8,12 +8,12 @@
 # Please keep Mars Base happy by following the input conventions.
 # Run this file from the command line, see where each rover travels to!
 
-require_relative 'mars_base'
+require_relative 'mission_control'
 
 filename = 'game_input.txt'
 
-mars_base = MarsBase.new(filename)
+mission = MissionControl.new(ARGV[0] || filename)
 
 puts 'OUTPUT:'
-mars_base.run
-puts mars_base.rover_report
+mission.run
+puts mission.rover_report

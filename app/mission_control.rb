@@ -1,12 +1,12 @@
 
 require_relative 'input_parser'
-require_relative 'mars_rover'
+require_relative 'rover'
 
 # Mars Base is the contact point for NASA; it receives, parses and
 # relays instructions for the mission.
 # A misson has one Plateau, and 0 to many Rovers.
 # When creating a new instance, it expects one parameter; a filename (string).
-class MarsBase
+class MissionControl
   attr_reader :rover_missions, :rovers
 
   def initialize(filename)
