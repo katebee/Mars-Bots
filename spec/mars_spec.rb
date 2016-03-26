@@ -61,4 +61,10 @@ describe MarsBase do
     mars_base.run
     expect(mars_base.rover_missions.length).to eq(2)
   end
+
+  it 'can output each rover location' do
+    mars_base = MarsBase.new(filename)
+    mars_base.run
+    expect(mars_base.rover_report).to match("1 3 N\n5 1 E\n")
+  end
 end

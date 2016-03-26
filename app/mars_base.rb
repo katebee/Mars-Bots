@@ -19,6 +19,7 @@ class MarsBase
     @instructions = File.readlines(@filename)
     @plateau = Plateau.new(extract_plateau_input(@instructions))
     extract_rover_input until @instructions.length < 2
+    command_rovers
   end
 
   # Check that the filename is in the correct format and that the file exists.
@@ -39,6 +40,17 @@ class MarsBase
   def validate_input
     raise 'Invalid filename, or file does not exist' unless valid_filename?
     raise 'Invalid or missing plateau dimensions' unless valid_dimensions?
+  end
+
+  # Use to output the mission result to a view, or the command line.
+  # Returns a string with the current location (or fate) of each rover.
+  # Information for each rover is separated by a newline.
+  def rover_report
+    report = ''
+    @rovers.each do |rover|
+      report << rover.report_location << "\n"
+    end
+    report
   end
 
   # Basic check that instruction line matches requirements
@@ -76,5 +88,16 @@ class MarsBase
       sequence: sequence
     }
     @rover_missions.push(rover_input)
+  end
+
+  # Initialise a rover for each set of rover commands.
+  # Orders the rover to perform the sequence.
+  # Adds each rover to the rovers hash.
+  def command_rovers
+    @rover_missions.each do |rover_input|
+      rover = Rover.new(rover_input)
+      rover.perform_sequence
+      @rovers.push(rover)
+    end
   end
 end

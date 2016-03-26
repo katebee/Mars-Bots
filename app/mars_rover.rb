@@ -30,6 +30,10 @@ class Rover
     @sequence = rover_input[:sequence]
   end
 
+  def report_location
+    "#{@coords_x} #{@coords_y} #{@orientation}"
+  end
+
   # Expected commands are L, R or M.
   def perform_sequence
     @sequence.each_char do |chr|
