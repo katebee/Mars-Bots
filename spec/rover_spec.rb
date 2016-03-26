@@ -16,7 +16,8 @@ describe Rover do
     expect(rover.coords_x).to eql(1)
     expect(rover.coords_y).to eql(2)
     expect(rover.orientation).to match('N')
-    expect(rover.sequence).to match('LMLMLMLMM')
+    expect(rover.sequence).to be == 'LMLMLMLMM'
+    expect(rover.alive?).to be true
   end
 
   it 'can move forward' do
@@ -26,7 +27,7 @@ describe Rover do
                         orientation: 'N',
                         sequence: 'MMM'
                       })
-    rover.perform_sequence
+    rover.perform_sequence(plateau)
     expect(rover.coords_y).to eql(5)
     expect(rover.orientation).to match('N')
   end
@@ -38,7 +39,7 @@ describe Rover do
                         orientation: 'N',
                         sequence: 'LLL'
                       })
-    rover.perform_sequence
+    rover.perform_sequence(plateau)
     expect(rover.orientation).to match('E')
   end
 
@@ -49,13 +50,13 @@ describe Rover do
                         orientation: 'N',
                         sequence: 'R'
                       })
-    rover.perform_sequence
+    rover.perform_sequence(plateau)
     expect(rover.orientation).to match('E')
   end
 
   it 'can perform the sequence' do
     rover = Rover.new(rover_input)
-    rover.perform_sequence
+    rover.perform_sequence(plateau)
     expect(rover.coords_x).to eql(1)
     expect(rover.coords_y).to eql(3)
     expect(rover.orientation).to match('N')
@@ -69,11 +70,30 @@ describe Rover do
                           orientation: 'N',
                           sequence: 'INVALIDCOMMANDS'
                         })
-      expect { rover.perform_sequence }.not_to raise_error
+      expect { rover.perform_sequence(plateau) }.not_to raise_error
       expect(rover.coords_x).to eql(0)
       expect(rover.coords_y).to eql(2)
       expect(rover.orientation).to match('W')
     end
+  end
+
+  it 'can report location' do
+    rover = Rover.new(rover_input)
+    expect(rover.report_location).to be == '1 2 N'
+    expect(rover.report_location).not_to be == ''
+  end
+
+  it 'can become lost' do
+    rover = Rover.new({
+                        coords_x: 0,
+                        coords_y: 0,
+                        orientation: 'S',
+                        sequence: 'M'
+                      })
+    rover.perform_sequence(plateau)
+    expect(rover.report_location).to be == 'ROVER LOST'
+    expect(rover.report_location).not_to be == ''
+    expect(rover.alive?).to be false
   end
 end
 

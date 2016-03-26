@@ -19,7 +19,7 @@ class MarsBase
     @instructions = File.readlines(@filename)
     @plateau = Plateau.new(extract_plateau_input(@instructions))
     extract_rover_input until @instructions.length < 2
-    command_rovers
+    command_rovers(@plateau)
   end
 
   # Check that the filename is in the correct format and that the file exists.
@@ -93,10 +93,10 @@ class MarsBase
   # Initialise a rover for each set of rover commands.
   # Orders the rover to perform the sequence.
   # Adds each rover to the rovers hash.
-  def command_rovers
+  def command_rovers(plateau)
     @rover_missions.each do |rover_input|
       rover = Rover.new(rover_input)
-      rover.perform_sequence
+      rover.perform_sequence(plateau)
       @rovers.push(rover)
     end
   end

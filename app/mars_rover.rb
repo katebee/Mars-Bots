@@ -21,31 +21,44 @@ end
 # hash = {coords_x: int, coords_y: int, orientation: string, sequence: string}
 # Rovers can turn in place (left or right) and move forward.
 class Rover
-  attr_reader :coords_x, :coords_y, :orientation, :sequence
+  attr_reader :coords_x, :coords_y, :orientation, :sequence, :alive
+  alias alive? alive
 
   def initialize(rover_input)
     @coords_x = rover_input[:coords_x]
     @coords_y = rover_input[:coords_y]
     @orientation = rover_input[:orientation]
     @sequence = rover_input[:sequence]
+    @alive = true
   end
 
+  # Dead rovers tell no tales
   def report_location
-    "#{@coords_x} #{@coords_y} #{@orientation}"
+    return "#{@coords_x} #{@coords_y} #{@orientation}" if @alive
+    return 'ROVER LOST' unless @alive
   end
 
   # Expected commands are L, R or M.
-  def perform_sequence
+  def perform_sequence(plateau)
     @sequence.each_char do |chr|
       case chr
       when 'L' then turn_left
       when 'R' then turn_right
-      when 'M' then move_forward
+      when 'M'
+        move_forward
+        unless plateau.location_is_safe?(@coords_x, @coords_y)
+          life_death_toggle
+          break
+        end
       end
     end
   end
 
   private
+
+  def life_death_toggle
+    @alive = !@alive
+  end
 
   def turn_left
     case @orientation
